@@ -1,0 +1,60 @@
+{
+  "displayName": "Löschsperre für Speicherkonten erzwingen (Custom)",
+  "policyType": "Custom",
+  "mode": "All",
+  "description": "Erstellt automatisch eine Löschsperre (CanNotDelete) für alle Storage Accounts im Geltungsbereich.",
+  "metadata": {
+    "category": "Governance"
+  },
+  "parameters": {},
+  "policyRule": {
+    "if": {
+      "field": "type",
+      "equals": "Microsoft.Storage/storageAccounts"
+    },
+    "then": {
+      "effect": "deployIfNotExists",
+      "details": {
+        "type": "Microsoft.Authorization/locks",
+        "existenceCondition": {
+          "field": "Microsoft.Authorization/locks/level",
+          "equals": "CanNotDelete"
+        },
+        "roleDefinitionIds": [
+          "/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635"
+        ],
+        "deployment": {
+          "properties": {
+            "mode": "Incremental",
+            "template": {
+              "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {
+                "storageAccountName": {
+                  "type": "string"
+                }
+              },
+              "resources": [
+                {
+                  "type": "Microsoft.Authorization/locks",
+                  "apiVersion": "2020-05-01",
+                  "name": "DeleteLock",
+                  "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+                  "properties": {
+                    "level": "CanNotDelete",
+                    "notes": "Automatisch durch Azure Policy erstellt."
+                  }
+                }
+              ]
+            },
+            "parameters": {
+              "storageAccountName": {
+                "value": "[field('name')]"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
