@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "displayName": "Allow only Germany West Central and Poland Central",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "This policy allows resource creation only in Germany West Central and Poland Central.",
+    "parameters": {},
+    "policyRule": {
+      "if": {
+        "not": {
+          "field": "location",
+          "in": [
+            "germanywestcentral",
+            "polandcentral"
+          ]
+        }
+      },
+      "then": {
+        "effect": "Deny"
+      }
+    }
+  }
+}
