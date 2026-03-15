@@ -1,0 +1,2 @@
+# Azure login
+az login
