@@ -1,9 +1,13 @@
-  Creat Password Profile:
+# Login:
+Connect-MgGraph -scopes "user.readwrite.all, group.readwrite.all"
+
+# Creat Password Profile:
   $PWProfile = @{
       Password = "Pa55w.rd";
       ForceChangePasswordNextSignIn = $false
   }
-Create User:
+
+# Create User:
     New-MgUser `
       -DisplayName "Cody Godinez" `
       -GivenName "Cody" -Surname "Godinez" `
